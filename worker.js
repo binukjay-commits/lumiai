@@ -29,9 +29,9 @@ export default {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: "Bearer " + env.GROQ_API_KEY },
         body: JSON.stringify({
-          model: "llama-3.3-70b-versatile",
+          model: "openai/gpt-oss-120b",
           messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
-          max_tokens: 700
+         max_tokens: 2000
         })
       });
       const data = await r.json();
