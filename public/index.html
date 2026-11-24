@@ -2,45 +2,179 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lumi</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lumi – your AI assistant</title>
+<meta name="description" content="Lumi is a friendly AI assistant. Ask anything, write faster and get ideas.">
 <style>
-:root{--bg:#faf9f7;--surface:#fff;--text:#1f1e1d;--muted:#6b6963;--accent:#c96442;--user:#efece6;--border:#e3e0d8}
-@media (prefers-color-scheme:dark){:root{--bg:#1c1b19;--surface:#262522;--text:#f1efe9;--muted:#a09d95;--user:#33312d;--border:#3a3834;color-scheme:dark}}
-*{box-sizing:border-box}html,body{height:100%;margin:0}
-body{background:var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;display:flex;flex-direction:column;max-width:760px;margin:0 auto}
-header{padding:14px 16px;border-bottom:1px solid var(--border);font-weight:600}
-#log{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
-.msg{max-width:88%;padding:10px 14px;border-radius:14px;white-space:pre-wrap;overflow-wrap:anywhere}
-.user{align-self:flex-end;background:var(--user)}
-.bot{align-self:flex-start;background:var(--surface);border:1px solid var(--border)}
-.err{color:var(--muted);font-size:14px}
-form{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--border)}
-textarea{flex:1;resize:none;font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 12px}
-button{font:inherit;cursor:pointer;border-radius:10px;border:0;background:var(--accent);color:#fff;padding:8px 18px}
-button:disabled{opacity:.5}
+:root{--bg:#faf9f7;--surface:#ffffff;--text:#1f1e1d;--muted:#6b6963;--accent:#c96442;--accent-ink:#ffffff;--user:#efece6;--border:#e3e0d8;--code:#f3f1ec;--shadow:0 1px 2px rgba(0,0,0,.05),0 6px 20px rgba(0,0,0,.05)}
+@media (prefers-color-scheme:dark){:root{--bg:#1c1b19;--surface:#262522;--text:#f1efe9;--muted:#a8a59d;--accent:#e07a55;--accent-ink:#1c1b19;--user:#34322e;--border:#3a3834;--code:#1f1e1c;--shadow:none;color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Sinhala","Iskoola Pota",sans-serif;display:flex;flex-direction:column;height:100dvh;padding-top:env(safe-area-inset-top,0px)}
+button{font:inherit;color:inherit;cursor:pointer}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px;border-bottom:1px solid var(--border);background:var(--bg)}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:38px;height:38px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;flex:none}
+.brand b{display:block;font-size:17px;line-height:1.2}
+.brand span{display:block;font-size:12.5px;color:var(--muted);line-height:1.2}
+#newchat{border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:7px 14px;font-size:14px}
+#newchat:hover{border-color:var(--accent)}
+main{flex:1;overflow-y:auto;scroll-behavior:smooth}
+.wrap{max-width:760px;margin:0 auto;padding:20px 18px 12px;display:flex;flex-direction:column;gap:18px}
+#welcome{text-align:center;padding:9vh 0 0}
+#welcome .logo{width:64px;height:64px;font-size:34px;margin:0 auto 18px}
+#welcome h1{font-size:30px;line-height:1.2;margin:0 0 8px}
+#welcome p{color:var(--muted);margin:0 0 26px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.chip{border:1px solid var(--border);background:var(--surface);border-radius:14px;padding:11px 16px;font-size:15px;text-align:left;box-shadow:var(--shadow)}
+.chip:hover{border-color:var(--accent)}
+.row{display:flex;gap:10px;align-items:flex-start}
+.row.user{justify-content:flex-end}
+.av{width:30px;height:30px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex:none;margin-top:2px}
+.bubble{max-width:calc(100% - 44px);overflow-wrap:anywhere}
+.user .bubble{background:var(--user);padding:10px 15px;border-radius:18px 18px 4px 18px;white-space:pre-wrap;max-width:85%}
+.bot .bubble{padding-top:3px}
+.bubble p{margin:0 0 10px}.bubble p:last-child{margin-bottom:0}
+.bubble ul,.bubble ol{margin:0 0 10px;padding-left:22px}
+.bubble li{margin:3px 0}
+.bubble h3,.bubble h4{margin:12px 0 6px;font-size:17px}
+.bubble code{background:var(--code);border:1px solid var(--border);border-radius:6px;padding:1px 5px;font:13.5px ui-monospace,Consolas,monospace}
+.bubble pre{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:12px 14px;overflow-x:auto;margin:0 0 10px}
+.bubble pre code{background:none;border:0;padding:0}
+.tablebox{overflow-x:auto;margin:0 0 10px}
+.bubble table{border-collapse:collapse;font-size:14.5px}
+.bubble th,.bubble td{border:1px solid var(--border);padding:6px 10px;text-align:left}
+.bubble th{background:var(--code)}
+.tools{margin-top:6px}
+.tools button{background:none;border:0;color:var(--muted);font-size:13px;padding:2px 0}
+.tools button:hover{color:var(--accent)}
+.dots{display:inline-flex;gap:5px;padding:9px 0}
+.dots i{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:b 1.2s infinite ease-in-out}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes b{0%,80%,100%{opacity:.25;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+.errtxt{color:var(--muted);font-size:15px}
+footer{padding:8px 18px calc(10px + env(safe-area-inset-bottom,0px));background:var(--bg)}
+form{max-width:760px;margin:0 auto;display:flex;align-items:flex-end;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:8px 8px 8px 16px;box-shadow:var(--shadow)}
+form:focus-within{border-color:var(--accent)}
+textarea{flex:1;border:0;outline:0;resize:none;background:transparent;color:var(--text);font:inherit;max-height:160px;padding:6px 0;line-height:1.5}
+#send{width:40px;height:40px;border-radius:50%;border:0;background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;flex:none}
+#send:disabled{opacity:.4;cursor:default}
+.note{max-width:760px;margin:6px auto 0;text-align:center;font-size:12px;color:var(--muted)}
+@media (max-width:520px){#welcome h1{font-size:25px}.brand span{display:none}}
 </style>
 </head>
 <body>
-<header>Lumi</header>
-<div id="log"><div class="msg bot">Hi, I’m Lumi! Ask me anything.</div></div>
-<form id="f"><textarea id="box" rows="1" placeholder="Type your message…"></textarea><button id="send">Send</button></form>
+<header>
+  <div class="brand"><div class="logo">L</div><div><b>Lumi</b><span>Your AI assistant</span></div></div>
+  <button id="newchat" type="button">New chat</button>
+</header>
+<main id="main"><div class="wrap" id="log">
+  <div id="welcome">
+    <div class="logo">L</div>
+    <h1>Hi, I’m Lumi</h1>
+    <p>Ask me anything, or try one of these.</p>
+    <div class="chips">
+      <button class="chip" type="button">Explain how the internet works in simple words</button>
+      <button class="chip" type="button">Write a friendly email asking for a day off</button>
+      <button class="chip" type="button">Give me 5 ideas for a YouTube channel</button>
+      <button class="chip" type="button">Help me plan a healthy weekly meal plan</button>
+    </div>
+  </div>
+</div></main>
+<footer>
+  <form id="f">
+    <textarea id="box" rows="1" placeholder="Message Lumi…" aria-label="Message Lumi"></textarea>
+    <button id="send" type="submit" aria-label="Send"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg></button>
+  </form>
+  <div class="note">Lumi can make mistakes. Created by Binuk Jayasuriya.</div>
+</footer>
 <script>
-const log=document.getElementById("log"),box=document.getElementById("box"),send=document.getElementById("send"),f=document.getElementById("f");
-let chatHistory=[];
-function add(cls,t){const d=document.createElement("div");d.className="msg "+cls;d.textContent=t;log.appendChild(d);log.scrollTop=log.scrollHeight;return d}
-box.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();f.requestSubmit()}});
-f.addEventListener("submit",async e=>{
-  e.preventDefault();const q=box.value.trim();if(!q)return;
-  box.value="";add("user",q);chatHistory.push({role:"user",content:q});
-  const b=add("bot","Thinking…");send.disabled=true;
+const log=document.getElementById("log"),main=document.getElementById("main"),box=document.getElementById("box"),send=document.getElementById("send"),f=document.getElementById("f");
+let chatHistory=[],busy=false;
+
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function inline(s){
+  s=esc(s);
+  s=s.replace(/`([^`]+)`/g,"<code>$1</code>");
+  s=s.replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>");
+  s=s.replace(/(^|[^*])\*([^*\s][^*]*)\*/g,"$1<em>$2</em>");
+  return s;
+}
+function render(text){
+  const lines=text.replace(/\r/g,"").split("\n");
+  let out="",i=0,list=null;
+  function closeList(){if(list){out+="</"+list+">";list=null}}
+  while(i<lines.length){
+    const ln=lines[i];
+    if(/^```/.test(ln)){
+      closeList();let code=[];i++;
+      while(i<lines.length&&!/^```/.test(lines[i])){code.push(lines[i]);i++}
+      i++;out+="<pre><code>"+esc(code.join("\n"))+"</code></pre>";continue;
+    }
+    if(/^\s*\|.*\|\s*$/.test(ln)&&i+1<lines.length&&/^\s*\|?[\s:\-|]+\|?\s*$/.test(lines[i+1])&&lines[i+1].includes("-")){
+      closeList();
+      const cells=r=>r.trim().replace(/^\|/,"").replace(/\|$/,"").split("|").map(c=>c.trim());
+      let t="<div class='tablebox'><table><thead><tr>"+cells(ln).map(c=>"<th>"+inline(c)+"</th>").join("")+"</tr></thead><tbody>";
+      i+=2;
+      while(i<lines.length&&/^\s*\|.*\|\s*$/.test(lines[i])){t+="<tr>"+cells(lines[i]).map(c=>"<td>"+inline(c)+"</td>").join("")+"</tr>";i++}
+      out+=t+"</tbody></table></div>";continue;
+    }
+    let m;
+    if((m=ln.match(/^\s*#{1,6}\s+(.*)$/))){closeList();out+="<h3>"+inline(m[1])+"</h3>";i++;continue}
+    if((m=ln.match(/^\s*[-*•]\s+(.*)$/))){if(list!=="ul"){closeList();out+="<ul>";list="ul"}out+="<li>"+inline(m[1])+"</li>";i++;continue}
+    if((m=ln.match(/^\s*\d+[.)]\s+(.*)$/))){if(list!=="ol"){closeList();out+="<ol>";list="ol"}out+="<li>"+inline(m[1])+"</li>";i++;continue}
+    if(ln.trim()===""){closeList();i++;continue}
+    closeList();
+    let para=[ln];i++;
+    while(i<lines.length&&lines[i].trim()!==""&&!/^(```|\s*#{1,6}\s|\s*[-*•]\s|\s*\d+[.)]\s|\s*\|)/.test(lines[i])){para.push(lines[i]);i++}
+    out+="<p>"+para.map(inline).join("<br>")+"</p>";
+  }
+  closeList();return out;
+}
+
+function scrollDown(){main.scrollTop=main.scrollHeight}
+function addUser(t){const r=document.createElement("div");r.className="row user";const b=document.createElement("div");b.className="bubble";b.textContent=t;r.appendChild(b);log.appendChild(r);scrollDown()}
+function addBot(){
+  const r=document.createElement("div");r.className="row bot";
+  const av=document.createElement("div");av.className="av";av.textContent="L";
+  const b=document.createElement("div");b.className="bubble";
+  b.innerHTML='<span class="dots"><i></i><i></i><i></i></span>';
+  r.appendChild(av);r.appendChild(b);log.appendChild(r);scrollDown();return b;
+}
+function addCopy(b,text){
+  const t=document.createElement("div");t.className="tools";
+  const c=document.createElement("button");c.type="button";c.textContent="Copy";
+  c.onclick=async()=>{try{await navigator.clipboard.writeText(text);c.textContent="Copied";setTimeout(()=>c.textContent="Copy",1500)}catch(e){}};
+  t.appendChild(c);b.appendChild(t);
+}
+function setBusy(v){busy=v;send.disabled=v}
+function hideWelcome(){const w=document.getElementById("welcome");if(w)w.remove()}
+
+async function ask(q){
+  if(!q||busy)return;
+  hideWelcome();addUser(q);chatHistory.push({role:"user",content:q});
+  box.value="";box.style.height="auto";
+  const b=addBot();setBusy(true);
   try{
     const r=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:chatHistory})});
     const d=await r.json();
     if(!r.ok)throw new Error(d.error||"Error");
-    b.textContent=d.reply;chatHistory.push({role:"assistant",content:d.reply});
-  }catch(err){b.className="msg bot err";b.textContent="Error: "+err.message;chatHistory.pop()}
-  send.disabled=false;box.focus();
+    b.innerHTML=render(d.reply);addCopy(b,d.reply);
+    chatHistory.push({role:"assistant",content:d.reply});
+  }catch(err){
+    console.error(err);chatHistory.pop();
+    b.innerHTML='<span class="errtxt">Sorry, I couldn’t answer just now. Please try again in a moment.</span>';
+  }
+  setBusy(false);scrollDown();box.focus();
+}
+
+f.addEventListener("submit",e=>{e.preventDefault();ask(box.value.trim())});
+box.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing){e.preventDefault();f.requestSubmit()}});
+box.addEventListener("input",()=>{box.style.height="auto";box.style.height=Math.min(box.scrollHeight,160)+"px"});
+document.querySelectorAll(".chip").forEach(c=>c.addEventListener("click",()=>ask(c.textContent)));
+document.getElementById("newchat").addEventListener("click",()=>{
+  if(busy)return;chatHistory=[];
+  log.innerHTML="";location.reload();
 });
 </script>
 </body>
