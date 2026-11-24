@@ -52,7 +52,7 @@
   body {
     background: var(--bg);
     color: var(--text);
-    font: 15.5px/1.65 system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Sinhala", "Iskoola Pota", sans-serif;
+    font: 15.5px/1.68 system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Sinhala", "Iskoola Pota", sans-serif;
     display: flex;
     height: 100dvh;
     overflow: hidden;
@@ -252,10 +252,10 @@
     padding: 16px 0 28px;
     display: flex;
     flex-direction: column;
-    gap: 22px;
+    gap: 24px;
   }
 
-  /* Gemini-style Welcome Hero */
+  /* Welcome Hero */
   #welcome {
     padding: 8vh 6px 12px;
     animation: fadeUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -328,7 +328,7 @@
     font-size: 14px;
   }
 
-  /* Message Rows & Animations */
+  /* Message Rows & Typography */
   .row {
     display: flex;
     gap: 14px;
@@ -352,41 +352,180 @@
   .sparkle-av svg { width: 18px; height: 18px; }
   .sparkle-av.thinking svg { animation: spinPulse 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
 
-  .bubble { max-width: calc(100% - 46px); overflow-wrap: anywhere; }
+  .bubble {
+    max-width: calc(100% - 46px);
+    min-width: 0;
+    overflow-wrap: break-word;
+    word-break: normal;
+    font-size: 15.5px;
+    line-height: 1.7;
+    letter-spacing: -0.005em;
+  }
+
   .user .bubble {
     background: var(--user-bubble);
     padding: 11px 17px;
-    border-radius: 22px 22px 6px 22px;
+    border-radius: 20px 20px 6px 20px;
     white-space: pre-wrap;
-    max-width: 82%;
+    max-width: min(82%, 580px);
+    line-height: 1.55;
   }
 
-  .bot .bubble { padding-top: 3px; }
-  .bubble p { margin: 0 0 11px; }
-  .bubble p:last-child { margin-bottom: 0; }
-  .bubble ul, .bubble ol { margin: 0 0 11px; padding-left: 22px; }
-  .bubble li { margin: 4px 0; }
-  .bubble h3, .bubble h4 { margin: 14px 0 6px; font-size: 17px; }
+  .bot .bubble {
+    flex: 1;
+    padding-top: 2px;
+  }
+
+  .bubble p {
+    margin: 0 0 13px;
+  }
+  .bubble p:last-child {
+    margin-bottom: 0;
+  }
+
+  .bubble h2 {
+    font-size: 19px;
+    font-weight: 600;
+    line-height: 1.35;
+    margin: 22px 0 10px;
+    letter-spacing: -0.01em;
+  }
+  .bubble h3 {
+    font-size: 16.5px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin: 18px 0 8px;
+  }
+  .bubble h4 {
+    font-size: 15.5px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin: 14px 0 6px;
+  }
+  .bubble :first-child {
+    margin-top: 0;
+  }
+
+  .bubble ul,
+  .bubble ol {
+    margin: 0 0 13px;
+    padding-left: 24px;
+  }
+  .bubble li {
+    margin: 6px 0;
+    padding-left: 2px;
+  }
+  .bubble li > p {
+    margin: 4px 0;
+  }
+  .bubble li > ul,
+  .bubble li > ol {
+    margin: 6px 0 4px;
+  }
+
+  .bubble blockquote {
+    margin: 0 0 14px;
+    padding: 2px 0 2px 14px;
+    border-left: 3px solid var(--accent-2);
+    color: var(--muted);
+  }
+
+  .bubble a {
+    color: var(--accent-1);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
   .bubble code {
     background: var(--code-bg);
     border: 1px solid var(--border);
     border-radius: 6px;
-    padding: 1px 6px;
-    font: 13.5px ui-monospace, Consolas, monospace;
+    padding: 2px 6px;
+    font-size: 13.5px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   }
-  .bubble pre {
-    background: var(--code-bg);
+
+  .code-card {
+    margin: 0 0 14px;
     border: 1px solid var(--border);
     border-radius: 14px;
+    background: var(--code-bg);
+    overflow: hidden;
+  }
+
+  .code-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 13px;
+    font-size: 12px;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    background: rgba(127, 127, 127, 0.05);
+  }
+
+  .code-copy {
+    font-size: 12px;
+    color: var(--muted);
+    padding: 2px 8px;
+    border-radius: 6px;
+  }
+  .code-copy:hover {
+    color: var(--text);
+    background: var(--surface-hover);
+  }
+
+  .code-card pre {
+    margin: 0;
     padding: 13px 15px;
     overflow-x: auto;
-    margin: 0 0 11px;
+    line-height: 1.55;
   }
-  .bubble pre code { background: none; border: 0; padding: 0; }
-  .tablebox { overflow-x: auto; margin: 0 0 11px; }
-  .bubble table { border-collapse: collapse; font-size: 14.5px; width: 100%; }
-  .bubble th, .bubble td { border: 1px solid var(--border); padding: 7px 11px; text-align: left; }
-  .bubble th { background: var(--code-bg); }
+
+  .code-card pre code {
+    background: none;
+    border: 0;
+    padding: 0;
+    font-size: 13.5px;
+  }
+
+  .tablebox {
+    overflow-x: auto;
+    margin: 0 0 14px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+
+  .bubble table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 520px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .bubble th,
+  .bubble td {
+    padding: 9px 13px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  .bubble th {
+    font-weight: 600;
+    background: var(--code-bg);
+  }
+
+  .bubble tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .bubble hr {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 16px 0;
+  }
 
   .shimmer-wrap {
     display: flex;
@@ -424,7 +563,7 @@
 
   .errtxt { color: var(--accent-3); font-size: 14.5px; }
 
-  /* Floating Gemini Input Bar */
+  /* Floating Input Bar */
   footer {
     padding: 8px 16px calc(12px + env(safe-area-inset-bottom, 0px));
     background: var(--bg);
@@ -770,59 +909,203 @@ function openChat(id) {
 }
 
 function esc(s) {
-  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  return String(s ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function safeUrl(url) {
+  const trimmed = String(url || "").trim();
+  if (/^https?:\/\//i.test(trimmed)) return esc(trimmed);
+  return "#";
 }
 
 function inline(s) {
-  s = esc(s);
-  s = s.replace(/`([^`]+)`/g, "<code>$1</code>");
-  s = s.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
-  s = s.replace(/(^|[^*])\*([^*\s][^*]*)\*/g, "$1<em>$2</em>");
-  return s;
+  let out = esc(s);
+  out = out.replace(/&lt;br\s*\/?&gt;/gi, "<br>");
+  out = out.replace(/`([^`\n]+)`/g, (_, code) => `<code>${code}</code>`);
+  out = out.replace(/\*\*([\s\S]+?)\*\*/g, (_, bold) => `<strong>${bold}</strong>`);
+  out = out.replace(/~~([\s\S]+?)~~/g, (_, strike) => `<del>${strike}</del>`);
+  out = out.replace(/(^|[\s(])\*([^*\s\n][^*\n]*?)\*(?=[\s).,!?:;]|$)/g, "$1<em>$2</em>");
+  out = out.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, (_, label, href) => {
+    return `<a href="${safeUrl(href)}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+  });
+  return out;
+}
+
+function isTableSep(line) {
+  const clean = line.trim().replace(/^\|/, "").replace(/\|$/, "");
+  return clean.includes("-") && clean.includes("|") && /^[\s:\-|]+$/.test(clean);
+}
+
+function splitCells(line) {
+  let clean = line.trim();
+  if (clean.startsWith("|")) clean = clean.slice(1);
+  if (clean.endsWith("|")) clean = clean.slice(0, -1);
+  return clean.split("|").map((c) => c.trim());
 }
 
 function render(text) {
-  const lines = text.replace(/\r/g, "").split("\n");
-  let out = "", i = 0, list = null;
-  function closeList() { if (list) { out += "</" + list + ">"; list = null; } }
+  const lines = String(text || "").replace(/\r\n/g, "\n").replace(/\r/g, "\n").split("\n");
+  let out = "";
+  let i = 0;
+  let list = null;
+
+  const closeList = () => {
+    if (list) {
+      out += `</${list}>`;
+      list = null;
+    }
+  };
+
   while (i < lines.length) {
     const ln = lines[i];
-    if (/^```/.test(ln)) {
-      closeList(); let code = []; i++;
-      while (i < lines.length && !/^```/.test(lines[i])) { code.push(lines[i]); i++; }
-      i++; out += "<pre><code>" + esc(code.join("\n")) + "</code></pre>"; continue;
-    }
-    if (/^\s*\|.*\|\s*$/.test(ln) && i + 1 < lines.length && /^\s*\Vert{}?[\s:\-\vert{}]+\Vert{}?\s*$/.test(lines[i + 1]) && lines[i + 1].includes("-")) {
+
+    // Code block
+    const fence = ln.trim().match(/^```([a-zA-Z0-9_-]*)\s*$/);
+    if (fence) {
       closeList();
-      const cells = r => r.trim().replace(/^\|/, "").replace(/\|$/, "").split("|").map(c => c.trim());
-      let t = "<div class='tablebox'><table><thead><tr>" + cells(ln).map(c => "<th>" + inline(c) + "</th>").join("") + "</tr></thead><tbody>";
-      i += 2;
-      while (i < lines.length && /^\s*\|.*\|\s*$/.test(lines[i])) {
-        t += "<tr>" + cells(lines[i]).map(c => "<td>" + inline(c) + "</td>").join("") + "</tr>"; i++;
+      const lang = esc(fence[1] || "code");
+      const codeLines = [];
+      i++;
+      while (i < lines.length && !/^```\s*$/.test(lines[i].trim())) {
+        codeLines.push(lines[i]);
+        i++;
       }
-      out += t + "</tbody></table></div>"; continue;
+      if (i < lines.length) i++;
+      out += `<div class="code-card"><div class="code-head"><span>${lang}</span><button class="code-copy" type="button" onclick="copyCodeBlock(this)">Copy</button></div><pre><code>${esc(codeLines.join("\n"))}</code></pre></div>`;
+      continue;
     }
-    let m;
-    if ((m = ln.match(/^\s*#{1,6}\s+(.*)$/))) { closeList(); out += "<h3>" + inline(m[1]) + "</h3>"; i++; continue; }
-    if ((m = ln.match(/^\s*[-*•]\s+(.*)$/))) {
-      if (list !== "ul") { closeList(); out += "<ul>"; list = "ul"; }
-      out += "<li>" + inline(m[1]) + "</li>"; i++; continue;
+
+    // Horizontal rule
+    if (/^\s*(-{3,}|\*{3,}|_{3,})\s*$/.test(ln)) {
+      closeList();
+      out += "<hr>";
+      i++;
+      continue;
     }
-    if ((m = ln.match(/^\s*\d+[.)]\s+(.*)$/))) {
-      if (list !== "ol") { closeList(); out += "<ol>"; list = "ol"; }
-      out += "<li>" + inline(m[1]) + "</li>"; i++; continue;
+
+    // Table
+    if (ln.trim().startsWith("|") && i + 1 < lines.length && isTableSep(lines[i + 1])) {
+      closeList();
+      const headers = splitCells(ln);
+      i += 2;
+      const rows = [];
+      while (i < lines.length && lines[i].trim() !== "") {
+        let row = lines[i].trim();
+        while (
+          !row.endsWith("|") &&
+          i + 1 < lines.length &&
+          lines[i + 1].trim() !== "" &&
+          !/^```/.test(lines[i + 1].trim()) &&
+          !/^\s*#{1,6}\s+/.test(lines[i + 1])
+        ) {
+          i++;
+          row += " " + lines[i].trim();
+        }
+        if (!row.includes("|")) break;
+        rows.push(splitCells(row));
+        i++;
+      }
+      out += `<div class="tablebox"><table><thead><tr>${headers.map((h) => `<th>${inline(h)}</th>`).join("")}</tr></thead><tbody>`;
+      for (const r of rows) {
+        out += `<tr>${r.map((c) => `<td>${inline(c)}</td>`).join("")}</tr>`;
+      }
+      out += "</tbody></table></div>";
+      continue;
     }
-    if (ln.trim() === "") { closeList(); i++; continue; }
+
+    // Headings
+    const h = ln.match(/^\s*(#{1,6})\s+(.*)$/);
+    if (h) {
+      closeList();
+      const tag = h[1].length <= 2 ? "h2" : h[1].length === 3 ? "h3" : "h4";
+      out += `<${tag}>${inline(h[2])}</${tag}>`;
+      i++;
+      continue;
+    }
+
+    // Blockquote
+    if (/^\s*>\s?/.test(ln)) {
+      closeList();
+      const quoteLines = [];
+      while (i < lines.length && /^\s*>\s?/.test(lines[i])) {
+        quoteLines.push(lines[i].replace(/^\s*>\s?/, ""));
+        i++;
+      }
+      out += `<blockquote><p>${quoteLines.map(inline).join("<br>")}</p></blockquote>`;
+      continue;
+    }
+
+    // Bullet list
+    const ul = ln.match(/^\s*[-*•]\s+(.*)$/);
+    if (ul) {
+      if (list !== "ul") {
+        closeList();
+        out += "<ul>";
+        list = "ul";
+      }
+      out += `<li>${inline(ul[1])}</li>`;
+      i++;
+      continue;
+    }
+
+    // Numbered list
+    const ol = ln.match(/^\s*\d+[.)]\s+(.*)$/);
+    if (ol) {
+      if (list !== "ol") {
+        closeList();
+        out += "<ol>";
+        list = "ol";
+      }
+      out += `<li>${inline(ol[1])}</li>`;
+      i++;
+      continue;
+    }
+
+    // Blank line
+    if (ln.trim() === "") {
+      closeList();
+      i++;
+      continue;
+    }
+
+    // Paragraph
     closeList();
-    let para = [ln]; i++;
-    while (i < lines.length && lines[i].trim() !== "" && !/^(```|\s*#{1,6}\s|\s*[-*•]\s|\s*\d+[.)]\s|\s*\|)/.test(lines[i])) {
-      para.push(lines[i]); i++;
+    const para = [ln];
+    i++;
+    while (
+      i < lines.length &&
+      lines[i].trim() !== "" &&
+      !/^```/.test(lines[i].trim()) &&
+      !/^\s*(-{3,}|\*{3,}|_{3,})\s*$/.test(lines[i]) &&
+      !/^\s*(#{1,6})\s+/.test(lines[i]) &&
+      !/^\s*>\s?/.test(lines[i]) &&
+      !/^\s*[-*•]\s+/.test(lines[i]) &&
+      !/^\s*\d+[.)]\s+/.test(lines[i]) &&
+      !(lines[i].trim().startsWith("|") && i + 1 < lines.length && isTableSep(lines[i + 1]))
+    ) {
+      para.push(lines[i]);
+      i++;
     }
-    out += "<p>" + para.map(inline).join("<br>") + "</p>";
+    out += `<p>${para.map(inline).join("<br>")}</p>`;
   }
+
   closeList();
   return out;
 }
+
+window.copyCodeBlock = async function (btn) {
+  const code = btn.closest(".code-card")?.querySelector("code")?.textContent || "";
+  try {
+    await navigator.clipboard.writeText(code);
+    const prev = btn.textContent;
+    btn.textContent = "Copied";
+    setTimeout(() => { btn.textContent = prev; }, 1400);
+  } catch {}
+};
 
 function scrollDown() { main.scrollTop = main.scrollHeight; }
 
@@ -877,7 +1160,7 @@ function revealReply(bubble, avatar, fullText, onDone) {
   const words = fullText.split(/(\s+)/);
   let idx = 0;
   let current = "";
-  const step = Math.max(2, Math.ceil(words.length / 45));
+  const step = Math.max(4, Math.ceil(words.length / 30));
 
   function tick() {
     current += words.slice(idx, idx + step).join("");
