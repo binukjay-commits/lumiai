@@ -5,7 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Lumi – AI Assistant</title>
 <meta name="description" content="Lumi is a friendly AI assistant created by Binuk Jayasuriya.">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<meta name="theme-color" content="#131314">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Lumi">
 <style>
   :root {
     --bg: #ffffff;
@@ -172,30 +177,6 @@
   }
   .side-link:hover { background: var(--surface-hover); color: var(--text); }
 
-  .user-pill {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    padding: 8px 10px;
-    border-radius: 10px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    font-size: 12.5px;
-  }
-  .user-email {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: var(--text);
-    font-weight: 500;
-  }
-  .signout-btn {
-    color: var(--accent-3);
-    font-weight: 600;
-    font-size: 12px;
-    flex-shrink: 0;
-  }
-
   /* Main Container */
   .shell {
     flex: 1;
@@ -234,7 +215,17 @@
     letter-spacing: -0.01em;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 9px;
+  }
+
+  .brand-logo {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    flex-shrink: 0;
   }
 
   .badge {
@@ -246,17 +237,6 @@
     color: var(--muted);
     border: 1px solid var(--border);
   }
-
-  .auth-header-btn {
-    padding: 7px 15px;
-    border-radius: 999px;
-    font-size: 13.5px;
-    font-weight: 600;
-    background: var(--grad);
-    color: #fff;
-    transition: transform 0.18s ease, opacity 0.18s ease;
-  }
-  .auth-header-btn:hover { transform: translateY(-1px); opacity: 0.94; }
 
   /* Chat Area */
   main {
@@ -511,121 +491,6 @@
     color: var(--muted);
   }
 
-  /* Auth Modal */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.55);
-    backdrop-filter: blur(4px);
-    z-index: 50;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-    animation: fadeIn 0.2s ease;
-  }
-  .modal-overlay.open { display: flex; }
-
-  .modal-card {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 24px;
-    width: 100%;
-    max-width: 400px;
-    padding: 26px 24px;
-    box-shadow: var(--shadow);
-    animation: msgIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .modal-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 6px;
-  }
-  .modal-top h2 {
-    margin: 0;
-    font-size: 22px;
-    background: var(--grad);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  .modal-sub {
-    margin: 0 0 18px;
-    font-size: 13.5px;
-    color: var(--muted);
-  }
-
-  .auth-tabs {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-    background: var(--surface);
-    padding: 4px;
-    border-radius: 999px;
-    margin-bottom: 16px;
-  }
-  .auth-tab {
-    padding: 7px;
-    border-radius: 999px;
-    font-size: 13.5px;
-    font-weight: 600;
-    color: var(--muted);
-    transition: background 0.18s ease, color 0.18s ease;
-  }
-  .auth-tab.active {
-    background: var(--bg);
-    color: var(--text);
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-  }
-
-  .field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-bottom: 14px;
-  }
-  .field label {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--muted);
-  }
-  .field input {
-    width: 100%;
-    padding: 11px 14px;
-    border-radius: 14px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text);
-    font: inherit;
-    outline: none;
-    transition: border-color 0.2s ease;
-  }
-  .field input:focus { border-color: var(--accent-1); }
-
-  .auth-submit {
-    width: 100%;
-    padding: 11px;
-    border-radius: 999px;
-    background: var(--grad);
-    color: #fff;
-    font-weight: 600;
-    font-size: 14.5px;
-    margin-top: 4px;
-    transition: opacity 0.18s ease, transform 0.18s ease;
-  }
-  .auth-submit:hover { opacity: 0.94; }
-  .auth-submit:disabled { opacity: 0.5; cursor: default; }
-
-  .auth-msg {
-    margin-top: 12px;
-    font-size: 13px;
-    text-align: center;
-    min-height: 18px;
-  }
-  .auth-msg.err { color: var(--accent-3); }
-  .auth-msg.ok { color: #34a853; }
-
   /* Keyframes */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(14px); }
@@ -689,11 +554,10 @@
     New chat
   </button>
 
-  <div class="hist-label">Your chats</div>
+  <div class="hist-label">Recent chats</div>
   <div class="hist-list" id="histList"></div>
 
   <div class="side-footer">
-    <div id="accountBox"></div>
     <a class="side-link" href="https://github.com/binukjay-commits/lumiai/discussions" target="_blank" rel="noopener">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       Updates &amp; Bug Reports
@@ -708,11 +572,11 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
       </button>
       <div class="brand-title">
+        <img class="brand-logo" src="/icon-192.png" alt="Lumi logo" onerror="this.style.display='none'">
         <span>Lumi</span>
         <span class="badge">AI</span>
       </div>
     </div>
-    <div id="headerRight"></div>
   </header>
 
   <main id="main">
@@ -732,35 +596,6 @@
   </footer>
 </div>
 
-<!-- Sign In / Sign Up Modal -->
-<div class="modal-overlay" id="authModal">
-  <div class="modal-card">
-    <div class="modal-top">
-      <h2 id="modalTitle">Welcome to Lumi</h2>
-      <button class="icon-btn" id="closeModal" type="button" aria-label="Close">✕</button>
-    </div>
-    <p class="modal-sub">Sign in to chat with Lumi and save your conversations across devices.</p>
-
-    <div class="auth-tabs">
-      <button class="auth-tab active" id="tabLogin" type="button">Sign In</button>
-      <button class="auth-tab" id="tabSignup" type="button">Create Account</button>
-    </div>
-
-    <form id="authForm">
-      <div class="field">
-        <label for="authEmail">Email</label>
-        <input id="authEmail" type="email" placeholder="you@example.com" required autocomplete="email">
-      </div>
-      <div class="field">
-        <label for="authPass">Password</label>
-        <input id="authPass" type="password" placeholder="Minimum 6 characters" minlength="6" required autocomplete="current-password">
-      </div>
-      <button class="auth-submit" id="authSubmit" type="submit">Sign In</button>
-      <div class="auth-msg" id="authMsg"></div>
-    </form>
-  </div>
-</div>
-
 <svg width="0" height="0" style="position:absolute">
   <defs>
     <linearGradient id="sparkleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -772,10 +607,7 @@
 </svg>
 
 <script>
-const SUPABASE_URL = "https://euhvzkuyntdgnkdrjodi.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_dcnFPP1JiyFlhJE0dx71sw_m6edUKiz";
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
+const STORAGE_KEY = "lumi_open_chats_v1";
 const log = document.getElementById("log"),
       main = document.getElementById("main"),
       box = document.getElementById("box"),
@@ -783,21 +615,9 @@ const log = document.getElementById("log"),
       f = document.getElementById("f"),
       sidebar = document.getElementById("sidebar"),
       backdrop = document.getElementById("backdrop"),
-      histList = document.getElementById("histList"),
-      accountBox = document.getElementById("accountBox"),
-      headerRight = document.getElementById("headerRight"),
-      authModal = document.getElementById("authModal"),
-      authForm = document.getElementById("authForm"),
-      authEmail = document.getElementById("authEmail"),
-      authPass = document.getElementById("authPass"),
-      authSubmit = document.getElementById("authSubmit"),
-      authMsg = document.getElementById("authMsg"),
-      tabLogin = document.getElementById("tabLogin"),
-      tabSignup = document.getElementById("tabSignup");
+      histList = document.getElementById("histList");
 
-let session = null;
-let authMode = "login";
-let chats = [];
+let chats = loadChats();
 let currentId = null;
 let chatHistory = [];
 let busy = false;
@@ -814,156 +634,46 @@ backdrop.addEventListener("click", () => {
   backdrop.classList.remove("show");
 });
 
-/* Auth Modal Logic */
-function openAuthModal(mode = "login") {
-  setAuthMode(mode);
-  authMsg.textContent = "";
-  authMsg.className = "auth-msg";
-  authModal.classList.add("open");
-  authEmail.focus();
-}
-
-function closeAuthModal() {
-  authModal.classList.remove("open");
-}
-
-function setAuthMode(mode) {
-  authMode = mode;
-  tabLogin.classList.toggle("active", mode === "login");
-  tabSignup.classList.toggle("active", mode === "signup");
-  authSubmit.textContent = mode === "login" ? "Sign In" : "Create Account";
-  authPass.autocomplete = mode === "login" ? "current-password" : "new-password";
-  authMsg.textContent = "";
-}
-
-tabLogin.addEventListener("click", () => setAuthMode("login"));
-tabSignup.addEventListener("click", () => setAuthMode("signup"));
-document.getElementById("closeModal").addEventListener("click", closeAuthModal);
-authModal.addEventListener("click", e => { if (e.target === authModal) closeAuthModal(); });
-
-authForm.addEventListener("submit", async e => {
-  e.preventDefault();
-  const email = authEmail.value.trim();
-  const password = authPass.value;
-  if (!email || !password) return;
-
-  authSubmit.disabled = true;
-  authMsg.className = "auth-msg";
-  authMsg.textContent = authMode === "login" ? "Signing in..." : "Creating account...";
-
+function loadChats() {
   try {
-    if (authMode === "signup") {
-      const { data, error } = await sb.auth.signUp({ email, password });
-      if (error) throw error;
-      if (data.session) {
-        closeAuthModal();
-      } else {
-        authMsg.className = "auth-msg ok";
-        authMsg.textContent = "Account created! Check your email to confirm, then sign in.";
-      }
-    } else {
-      const { error } = await sb.auth.signInWithPassword({ email, password });
-      if (error) throw error;
-      closeAuthModal();
-    }
-  } catch (err) {
-    authMsg.className = "auth-msg err";
-    authMsg.textContent = err.message || "Authentication failed.";
-  } finally {
-    authSubmit.disabled = false;
-  }
-});
-
-function renderAccountUI() {
-  if (session && session.user) {
-    headerRight.innerHTML = "";
-    accountBox.innerHTML = `
-      <div class="user-pill">
-        <span class="user-email" title="${esc(session.user.email)}">${esc(session.user.email)}</span>
-        <button class="signout-btn" id="signOutBtn" type="button">Sign out</button>
-      </div>
-    `;
-    document.getElementById("signOutBtn").onclick = async () => {
-      await sb.auth.signOut();
-    };
-  } else {
-    headerRight.innerHTML = `<button class="auth-header-btn" id="headerSignIn" type="button">Sign In</button>`;
-    document.getElementById("headerSignIn").onclick = () => openAuthModal("login");
-    accountBox.innerHTML = `
-      <button class="side-link" id="sideSignIn" type="button" style="width:100%">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-        Sign In / Create Account
-      </button>
-    `;
-    document.getElementById("sideSignIn").onclick = () => openAuthModal("login");
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
   }
 }
 
-/* Cloud Chat Sync via Supabase */
-async function fetchChatsFromCloud() {
-  if (!session || !session.user) {
-    chats = [];
-    renderSidebar();
-    return;
-  }
-  const { data, error } = await sb
-    .from("chats")
-    .select("id, title, messages, updated_at")
-    .order("updated_at", { ascending: false })
-    .limit(40);
-
-  if (!error && Array.isArray(data)) {
-    chats = data;
-    renderSidebar();
-  }
+function saveChats() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(chats.slice(0, 30)));
+  } catch {}
 }
 
-async function syncCurrentChatToCloud(titleIfNew) {
-  if (!session || !session.user) return;
+function saveCurrentChat(titleIfNew) {
   if (!currentId) {
-    const { data, error } = await sb
-      .from("chats")
-      .insert({
-        user_id: session.user.id,
-        title: titleIfNew.slice(0, 48),
-        messages: chatHistory,
-        updated_at: new Date().toISOString()
-      })
-      .select("id, title, messages, updated_at")
-      .single();
-
-    if (!error && data) {
-      currentId = data.id;
-      chats.unshift(data);
-      renderSidebar();
-    }
+    currentId = String(Date.now());
+    chats.unshift({
+      id: currentId,
+      title: titleIfNew.slice(0, 48),
+      messages: [...chatHistory]
+    });
   } else {
-    await sb
-      .from("chats")
-      .update({
-        messages: chatHistory,
-        updated_at: new Date().toISOString()
-      })
-      .eq("id", currentId);
-
     const idx = chats.findIndex(c => c.id === currentId);
     if (idx !== -1) {
       chats[idx].messages = [...chatHistory];
       const [moved] = chats.splice(idx, 1);
       chats.unshift(moved);
-      renderSidebar();
     }
   }
+  saveChats();
+  renderSidebar();
 }
 
 function renderSidebar() {
   histList.innerHTML = "";
-  if (!session || !session.user) {
-    histList.innerHTML = `<div class="hist-empty">Sign in to save and view your past chats across devices.</div>`;
-    return;
-  }
   if (chats.length === 0) {
-    histList.innerHTML = `<div class="hist-empty">No saved conversations yet.</div>`;
+    histList.innerHTML = `<div class="hist-empty">No recent chats yet.</div>`;
     return;
   }
   chats.forEach(c => {
@@ -972,17 +682,17 @@ function renderSidebar() {
     const title = document.createElement("span");
     title.className = "hist-title";
     title.textContent = c.title || "New conversation";
-    title.onclick = () => loadChat(c.id);
+    title.onclick = () => openChat(c.id);
 
     const del = document.createElement("button");
     del.className = "del-chat";
     del.type = "button";
     del.textContent = "×";
     del.title = "Delete chat";
-    del.onclick = async (e) => {
+    del.onclick = (e) => {
       e.stopPropagation();
-      await sb.from("chats").delete().eq("id", c.id);
       chats = chats.filter(x => x.id !== c.id);
+      saveChats();
       if (currentId === c.id) startNewChat();
       else renderSidebar();
     };
@@ -994,10 +704,9 @@ function renderSidebar() {
 }
 
 function showWelcome() {
-  const firstName = session?.user?.email ? session.user.email.split("@")[0] : "";
   log.innerHTML = `
     <div id="welcome">
-      <h1 class="hero-title">${firstName ? `Hello, ${esc(firstName)}` : "Hello, I’m Lumi"}</h1>
+      <h1 class="hero-title">Hello, I’m Lumi</h1>
       <p class="hero-sub">How can I help you today?</p>
       <div class="chips">
         <button class="chip" type="button">
@@ -1036,7 +745,7 @@ function startNewChat() {
   }
 }
 
-function loadChat(id) {
+function openChat(id) {
   if (busy) return;
   const found = chats.find(c => c.id === id);
   if (!found) return;
@@ -1195,11 +904,6 @@ function setBusy(v) {
 async function ask(q) {
   if (!q || busy) return;
 
-  if (!session || !session.access_token) {
-    openAuthModal("login");
-    return;
-  }
-
   const w = document.getElementById("welcome");
   if (w) w.remove();
 
@@ -1214,17 +918,14 @@ async function ask(q) {
   try {
     const r = await fetch("/api/chat", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + session.access_token
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ messages: chatHistory })
     });
     const d = await r.json();
     if (!r.ok) throw new Error(d.error || "Error");
 
     chatHistory.push({ role: "assistant", content: d.reply });
-    await syncCurrentChatToCloud(q);
+    saveCurrentChat(q);
 
     revealReply(bubble, avatar, d.reply, () => {
       setBusy(false);
@@ -1254,30 +955,14 @@ box.addEventListener("input", () => {
 });
 document.getElementById("newchat").addEventListener("click", startNewChat);
 
-/* Listen for Auth State Changes */
-sb.auth.onAuthStateChange(async (_event, newSession) => {
-  session = newSession;
-  renderAccountUI();
-  if (session) {
-    await fetchChatsFromCloud();
-    if (!currentId && chatHistory.length === 0) showWelcome();
-  } else {
-    chats = [];
-    currentId = null;
-    chatHistory = [];
-    renderSidebar();
-    showWelcome();
-  }
-});
+renderSidebar();
+showWelcome();
 
-(async () => {
-  const { data } = await sb.auth.getSession();
-  session = data.session;
-  renderAccountUI();
-  if (session) await fetchChatsFromCloud();
-  else renderSidebar();
-  showWelcome();
-})();
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js").catch(() => {});
+  });
+}
 </script>
 </body>
 </html>
