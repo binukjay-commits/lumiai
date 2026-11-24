@@ -27,19 +27,19 @@ button:disabled{opacity:.5}
 <form id="f"><textarea id="box" rows="1" placeholder="Type your message…"></textarea><button id="send">Send</button></form>
 <script>
 const log=document.getElementById("log"),box=document.getElementById("box"),send=document.getElementById("send"),f=document.getElementById("f");
-let history=[];
+let chatHistory=[];
 function add(cls,t){const d=document.createElement("div");d.className="msg "+cls;d.textContent=t;log.appendChild(d);log.scrollTop=log.scrollHeight;return d}
 box.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();f.requestSubmit()}});
 f.addEventListener("submit",async e=>{
   e.preventDefault();const q=box.value.trim();if(!q)return;
-  box.value="";add("user",q);history.push({role:"user",content:q});
+  box.value="";add("user",q);chatHistory.push({role:"user",content:q});
   const b=add("bot","Thinking…");send.disabled=true;
   try{
-    const r=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:history})});
+    const r=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:chatHistory})});
     const d=await r.json();
     if(!r.ok)throw new Error(d.error||"Error");
-    b.textContent=d.reply;history.push({role:"assistant",content:d.reply});
-  }catch(err){b.className="msg bot err";b.textContent="b.textContent="Error: "+err.message";history.pop()}
+    b.textContent=d.reply;chatHistory.push({role:"assistant",content:d.reply});
+  }catch(err){b.className="msg bot err";b.textContent="Error: "+err.message;chatHistory.pop()}
   send.disabled=false;box.focus();
 });
 </script>
