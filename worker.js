@@ -33,6 +33,14 @@ export default {
       return json({ error: "No messages" }, 400);
     }
 
+    const cleanName = typeof body.userName === "string"
+      ? body.userName.replace(/[\r\n]+/g, " ").trim().slice(0, 40)
+      : "";
+
+    const systemContent = cleanName
+      ? `${SYSTEM_PROMPT} The user's name is ${cleanName}. Address them naturally by name when appropriate.`
+      : SYSTEM_PROMPT;
+
     messages = messages.slice(-12).map((m) => ({
       role: m.role === "assistant" ? "assistant" : "user",
       content: String(m.content || "").slice(0, 2000)
@@ -47,7 +55,7 @@ export default {
         },
         body: JSON.stringify({
           model: "openai/gpt-oss-120b",
-          messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
+          messages: [{ role: "system", content: systemContent }, ...messages],
           max_tokens: 2000
         })
       });
